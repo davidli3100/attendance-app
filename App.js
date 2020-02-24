@@ -1,6 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import {Font, AppLoading} from 'expo';
+import { Font, AppLoading } from 'expo';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack'
+import Login from './screens/Login';
+import Home from './screens/Home';
+/**
+ * Create navigation logic 
+ * @todo consider moving this to a separate file later
+ */
+
+ const Stack = createStackNavigator();
+
 
 export default class App extends React.Component {
 
@@ -23,11 +35,25 @@ export default class App extends React.Component {
     }
 
     return (
-      <View>
-        <Text>
-          If you are seeing this, something has gone horribly wrong - We're working on solving the error!
-        </Text>
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator>
+          { 
+            this.state.userToken === null && this.state.UserLoggedIn === null 
+            ? 
+            (
+              <Stack.Screen
+                name="Sign In"
+                component={Login}
+              />
+            ) 
+            :
+            (  
+              //user signed in
+              <Stack.Screen name="Home" component={Home}/>
+            )
+          }
+        </Stack.Navigator>
+      </NavigationContainer>
     )
   }
 
@@ -45,6 +71,7 @@ export default class App extends React.Component {
       'Averta-ExtraBold': require('./assets/fonts/Averta-ExtraBold.ttf')
     })
 
+    // start checking for whether or not a user is logged in
 
   }
 }
